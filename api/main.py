@@ -97,8 +97,6 @@ app_state: Dict[str, Any] = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    tf.config.threading.set_intra_op_parallelism_threads(int(os.getenv("TF_INTRA_OP", "0")) or None)
-    tf.config.threading.set_inter_op_parallelism_threads(int(os.getenv("TF_INTER_OP", "0")) or None)
 
     model = load_model(MODEL_PATH)
     if model is None:

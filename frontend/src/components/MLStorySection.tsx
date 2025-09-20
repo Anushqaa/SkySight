@@ -7,7 +7,10 @@ interface MLStorySectionProps {
   title: string;
   subtitle: string;
   content: string[];
+  // backgroundImage is used only for the section background (string or array)
   backgroundImage: string | string[];
+  // slideImages are the images shown inside the image/card area (carousel/dual/single)
+  slideImages?: string[];
   imagePosition?: "left" | "right";
   accentColor?: string;
   layout?: "single" | "dual" | "carousel";
@@ -18,6 +21,7 @@ export const MLStorySection = ({
   subtitle,
   content,
   backgroundImage,
+  slideImages = [],
   imagePosition = "left",
   accentColor = "primary",
   layout = "single"
@@ -26,8 +30,12 @@ export const MLStorySection = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   
-  const images = Array.isArray(backgroundImage) ? backgroundImage : [backgroundImage];
+  // background(s) remain sourced from backgroundImage prop
+  const imagesFromBackground = Array.isArray(backgroundImage) ? backgroundImage : [backgroundImage];
   const mainBackground = Array.isArray(backgroundImage) ? backgroundImage[0] : backgroundImage;
+
+  // slides used for the image/card area — prefer explicit slideImages, fall back to background images
+  const slides = (slideImages && slideImages.length > 0) ? slideImages : imagesFromBackground;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -47,34 +55,38 @@ export const MLStorySection = ({
   }, []);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % slides.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentImageIndex((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   const renderImageSection = () => {
     if (layout === "carousel") {
       return (
         <div className="relative">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
+          {/* Carousel container: centered & constrained */}
+          <div className="w-auto max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-2xl hover-lift relative">
             <div 
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
             >
-              {images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`${title} ${index + 1}`}
-                  className="w-full h-80 object-cover flex-shrink-0"
-                />
+              {slides.map((img, index) => (
+                <div key={index} className="w-full h-80 flex items-center justify-center flex-shrink-0 bg-transparent">
+                  <img
+                    src={img}
+                    alt={`${title} ${index + 1}`}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
               ))}
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+            {/* overlay gradient */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             
-            {images.length > 1 && (
+            {slides.length > 1 && (
               <>
                 <Button
                   variant="ghost"
@@ -102,12 +114,12 @@ export const MLStorySection = ({
     if (layout === "dual") {
       return (
         <div className="space-y-4">
-          {images.slice(0, 2).map((img, index) => (
-            <div key={index} className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
+          {slides.slice(0, 2).map((img, index) => (
+            <div key={index} className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift h-64 flex items-center justify-center">
               <img
                 src={img}
                 alt={`${title} ${index + 1}`}
-                className="w-full h-64 object-cover"
+                className="max-w-full max-h-full object-contain"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
@@ -118,11 +130,11 @@ export const MLStorySection = ({
 
     // Single image layout
     return (
-      <div className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
+      <div className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift h-80 flex items-center justify-center">
         <img
-          src={images[0]}
+          src={slides[0]}
           alt={title}
-          className="w-full h-80 object-cover"
+          className="max-w-full max-h-full object-contain"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
       </div>
@@ -151,20 +163,26 @@ export const MLStorySection = ({
         )}>
           <div className={cn(
             "grid gap-12 items-start",
-            imagePosition === "left" ? "lg:grid-cols-[2fr,1fr]" : "lg:grid-cols-[1fr,2fr]"
+            layout === "carousel"
+              ? "lg:grid-cols-1 text-center" // stack vertically & center carousel above text
+              : imagePosition === "left"
+                ? "lg:grid-cols-[2fr,1fr]"
+                : "lg:grid-cols-[1fr,2fr]"
           )}>
-            {/* Image section - More space for images */}
+            {/* Image section */}
             <div className={cn(
               "relative",
+              layout === "carousel" && "flex items-center justify-center",
               imagePosition === "right" && "lg:order-2"
             )}>
               {renderImageSection()}
             </div>
 
-            {/* Content section - Less space for text */}
+            {/* Content section */}
             <div className={cn(
               "space-y-6",
-              imagePosition === "right" && "lg:order-1"
+              imagePosition === "right" && "lg:order-1",
+              layout === "carousel" && "max-w-3xl mx-auto text-left"
             )}>
               <div className="space-y-4">
                 <div className={cn(

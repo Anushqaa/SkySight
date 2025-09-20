@@ -4,16 +4,32 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 // Import sample images
-import sampleImage1 from "@/assets/sample-image-1.jpg";
-import sampleImage2 from "@/assets/sample-image-2.jpg";
-import sampleImage3 from "@/assets/sample-image-3.jpg";
-import sampleImage4 from "@/assets/sample-image-4.jpg";
+import sampleImage0 from "@/assets/images/image_0.png";
+import sampleImage1 from "@/assets/images/image_1.png";
+import sampleImage2 from "@/assets/images/image_2.png";
+import sampleImage3 from "@/assets/images/image_3.png";
+import sampleImage4 from "@/assets/images/image_4.png";
+import sampleImage5 from "@/assets/images/image_5.png";
+import sampleImage6 from "@/assets/images/image_6.png";
+import sampleImage7 from "@/assets/images/image_7.png";
+import sampleImage8 from "@/assets/images/image_8.png";
+import sampleImage9 from "@/assets/images/image_9.png";
+import sampleImage10 from "@/assets/images/image_10.png";
+import sampleImage11 from "@/assets/images/image_11.png";
 
 const sampleImages = [
-  { id: 1, src: sampleImage1, title: "Agricultural Field", description: "Crop rows with clear segmentation boundaries" },
-  { id: 2, src: sampleImage2, title: "Urban Landscape", description: "Buildings, roads, and green spaces" },
-  { id: 3, src: sampleImage3, title: "Coastal Area", description: "Beach, water, and vegetation zones" },
-  { id: 4, src: sampleImage4, title: "Forest Area", description: "Trees, clearings, and dirt paths" },
+  { id: 0, src: sampleImage0, title: "Roads", description: "You can see me cycling" },
+  { id: 1, src: sampleImage1, title: "Roads again", description: "The red car, yeah" },
+  { id: 2, src: sampleImage2, title: "Yard", description: "Peculiar shape" },
+  { id: 3, src: sampleImage3, title: "Ground", description: "Trees, clearings, and dirt paths" },
+  { id: 4, src: sampleImage4, title: "Roads still", description: "Humans have made a dense concrete jungle" },
+  { id: 5, src: sampleImage5, title: "Yard", description: "Speak of the devil, what a lovely pair" },
+  { id: 6, src: sampleImage6, title: "Yard", description: "Thats my grandma, nu-uh" },
+  { id: 7, src: sampleImage7, title: "Yard", description: "Or a road, whatever" },
+  { id: 8, src: sampleImage8, title: "Ground", description: "Whats that in red, I wonder?" },
+  { id: 9, src: sampleImage9, title: "Ground", description: "I wanted to say graveyard" },
+  { id: 10, src: sampleImage10, title: "Ground", description: "Only because I hate roads" },
+  { id: 11, src: sampleImage11, title: "Yard", description: "A kid cycling, free of any tethers" },
 ];
 
 interface ImageCarouselProps {

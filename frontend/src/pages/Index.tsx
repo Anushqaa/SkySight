@@ -4,10 +4,22 @@ import { SegmentationInterface } from "@/components/SegmentationInterface";
 import { MLStorySection } from "@/components/MLStorySection";
 
 // Import background images
-import heroBackground from "@/assets/hero-background.jpg";
-import storyBackground1 from "@/assets/story-background-1.jpg";
-import storyBackground2 from "@/assets/story-background-2.jpg";
-import storyBackground3 from "@/assets/story-background-3.jpg";
+import heroBackground from "@/assets/ocean_rocks.jpg";
+import storyBackground1 from "@/assets/surreal_farmer.png";
+import storyBackground2 from "@/assets/forest.jpg";
+import storyBackground3 from "@/assets/buildings.jpg";
+
+import slide0Image0 from "@/assets/distribution_pixel_percentage_by_class.png";
+import slide0Image1 from "@/assets/at_least_one.png";
+import slide0Image2 from "@/assets/distribution_grayscale_brightness.png";
+import slide0Image3 from "@/assets/mean_dist.png";
+import slide0Image4 from "@/assets/median_dist.png";
+
+import slide1Image0 from "@/assets/models_experiment.png";
+import slide1Image1 from "@/assets/final_training_metrics.png";
+
+import slide2Image0 from "@/assets/model_iou.png";
+import slide2Image1 from "@/assets/inference_demo.png";
 
 interface SelectedImage {
   id: number;
@@ -28,30 +40,31 @@ const Index = () => {
 
   const storyContent = {
     section1: {
-      title: "The Vision Behind Drone Intelligence",
-      subtitle: "AI-Powered Analysis",
+      title: "Understanding Aerial Landscapes",
+      subtitle: "Turning drone imagery into insightful data",
       content: [
-        "Our cutting-edge drone image segmentation technology revolutionizes how we understand and analyze aerial imagery. By combining the power of artificial intelligence with advanced computer vision, we unlock insights that were previously impossible to obtain.",
-        "Each pixel tells a story. Our sophisticated algorithms can distinguish between vegetation, soil, water bodies, infrastructure, and countless other features with remarkable precision. This level of detail enables applications ranging from precision agriculture to urban planning and environmental monitoring.",
-        "The journey from raw aerial footage to actionable intelligence happens in seconds, transforming vast landscapes into comprehensible, analyzable data that drives better decision-making across industries."
+        "Every drone captures thousands of pixels, but which ones matter? I tackled semantic segmentation of high-resolution aerial images to identify 24 distinct landscape features—from vegetation and water bodies to buildings and roads.",
+        "Working with just 400 images presented real challenges. Class imbalance was severe—some features appeared in 37% of pixels while others barely reached 0.02%. I resized images to optimal dimensions while preserving aspect ratios and conducted thorough exploratory data analysis.",
+        "The solution? Custom data augmentation pipeline and strategic loss function selection. With limited data, every pixel counts."
       ]
     },
     section2: {
-      title: "Precision Meets Innovation",
-      subtitle: "Advanced Segmentation",
+      title: "Computer Vision Model Deep Dive",
+      subtitle: "Seven models, one winner",
       content: [
-        "Our machine learning models have been trained on millions of drone images, learning to recognize patterns and features across diverse terrains and conditions. The result is unprecedented accuracy in image segmentation that adapts to various environments.",
-        "From detecting crop health variations in agricultural fields to identifying infrastructure elements in urban environments, our technology provides the granular detail needed for informed decision-making.",
-        "The interactive overlay system allows users to explore segmented regions with intuitive hover interactions, making complex AI analysis accessible and understandable to professionals across different fields."
+        "I systematically tested seven different architectures: UNet variants with ResNet34, VGG16, and MobileNetV2 backbones, plus UNet++, LinkNet, and DeepLabV3+.",
+        "Each model trained for 5 epochs across 2 GPUs for fair comparison. The winner came out to be DeepLabV3+ with its superior handling of multi-scale features through ASPP modules.",
+        "Final training: 63 epochs with custom dice loss and mean IoU metrics. Early stopping kicked in when validation stopped improving. Result: 0.508 IoU on test set—solid performance for complex aerial segmentation."
       ]
     },
     section3: {
-      title: "Transforming Industries",
-      subtitle: "Real-World Impact",
+      title: "Model to Full Stack Application",
+      subtitle: "Complete ML pipeline in production",
       content: [
-        "Agriculture professionals use our technology to optimize crop yields, detect plant diseases early, and manage irrigation systems more effectively. The precision of our segmentation enables targeted treatments that reduce costs and environmental impact.",
-        "Urban planners and environmental scientists leverage our analysis to monitor land use changes, assess environmental health, and plan sustainable development projects with unprecedented detail and accuracy.",
-        "The future of aerial intelligence is here, and it's accessible through a simple, elegant interface that puts the power of advanced AI analysis at your fingertips."
+        "I built a complete full-stack application to showcase the entire ML workflow.",
+        "Backend: FastAPI service with async inference, base64 mask responses, and deployed on Render. The API handles image uploads, preprocessing, and returns segmented masks with class metadata.",
+        "Frontend: React application with dynamic visualization, interactive legends, and real-time mask overlays. Users can explore different drone images and see segmentation results instantly. Thankyou lovable.dev.",
+        "And came SkySight, production-ready Drone Image Semantic Segmentation system, demonstrating end-to-end ML engineering skills."
       ]
     }
   };
@@ -75,18 +88,15 @@ const Index = () => {
             <div className="text-center mb-16 animate-fade-in">
               <div className="space-y-8 mb-16">
                 <h1 className="text-6xl lg:text-8xl font-bold text-white leading-tight animate-float">
-                  <span className="block">Drone</span>
-                  <span className="block bg-gradient-to-r from-primary via-white to-primary-glow bg-clip-text text-transparent animate-pulse">
-                    Intelligence
-                  </span>
+                  <span className="block"><br></br>SkySight</span>
                 </h1>
                 <div className="max-w-4xl mx-auto space-y-6">
                   <p className="text-2xl lg:text-3xl font-light text-white/90 leading-relaxed">
-                    Transform aerial imagery into 
-                    <span className="font-semibold text-primary-glow"> actionable insights</span>
+                    See the Unseen: 
+                    <span className="font-semibold text-primary-glow">AI-Powered Drone Insights </span>
                   </p>
                   <p className="text-lg lg:text-xl text-white/70 leading-relaxed">
-                    Cutting-edge AI segmentation that reveals hidden patterns in every pixel
+                    Use AI to instantly extract roads, buildings, water, and vegetation from high-resolution drone images—turning pixels into actionable maps
                   </p>
                 </div>
               </div>
@@ -113,7 +123,8 @@ const Index = () => {
             title={storyContent.section1.title}
             subtitle={storyContent.section1.subtitle}
             content={storyContent.section1.content}
-            backgroundImage={[storyBackground1, storyBackground2, storyBackground3]}
+            backgroundImage={storyBackground1}
+            slideImages={[slide0Image0, slide0Image1, slide0Image2, slide0Image3, slide0Image4]}
             imagePosition="left"
             accentColor="primary"
             layout="carousel"
@@ -123,7 +134,8 @@ const Index = () => {
             title={storyContent.section2.title}
             subtitle={storyContent.section2.subtitle}
             content={storyContent.section2.content}
-            backgroundImage={[storyBackground2, storyBackground3]}
+            backgroundImage={storyBackground2}
+            slideImages={[slide1Image0, slide1Image1]}
             imagePosition="right"
             accentColor="secondary"
             layout="dual"
@@ -133,7 +145,8 @@ const Index = () => {
             title={storyContent.section3.title}
             subtitle={storyContent.section3.subtitle}
             content={storyContent.section3.content}
-            backgroundImage={[storyBackground3, storyBackground1]}
+            backgroundImage={storyBackground3}
+            slideImages={[slide2Image0, slide2Image1]}
             imagePosition="left"
             accentColor="primary"
             layout="dual"
